@@ -12,3 +12,4 @@ exports.postAddProducts = (req, res, next) => {
 exports.getProducts = (req, res, next) => {
     res.render('shop', { prods: products, pageTitle: 'Shop', path: '/shop', isProductAvailable: products.length > 0, hasProductCss: true, activeShop: true, activeAddProduct: false });
 }
+
