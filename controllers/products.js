@@ -11,7 +11,8 @@ exports.postAddProducts = (req, res, next) => {
   }
 
 exports.getProducts = (req, res, next) => {
-    const products = Product.fetchProduct();
-    res.render('shop', { prods: products, pageTitle: 'Shop', path: '/shop', isProductAvailable: products.length > 0, hasProductCss: true, activeShop: true, activeAddProduct: false });
+    Product.fetchProduct(products => {
+        res.render('shop', { prods: products, pageTitle: 'Shop', path: '/shop', isProductAvailable: products.length > 0, hasProductCss: true, activeShop: true, activeAddProduct: false });
+    });
 }
 
