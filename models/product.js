@@ -1,17 +1,33 @@
-const products = [];
+const path = require('path');
+const fs = require('fs');
+const pth = require('../util/path');
 
 module.exports = class Product {
     constructor(t) {
-        console.log("🚀 ~ file: product.js ~ line 6 ~ Product ~ constructor ~ this", this)
         this.title = t;
-        console.log("🚀 ~ file: product.js ~ line 6 ~ Product ~ constructor ~ this", this)
     };
 
     save() {
-        products.push(this);
+        const p = path.join(pth, 'data', 'products.json');
+        fs.readFile(p, (err, fileContent) => {
+            let products = [];
+            if(!err) {
+                products = JSON.parse(fileContent);
+            }
+            products.push(this);
+            fs.writeFile(p, JSON.stringify(products), (err) => {
+                console.log(err);
+            });
+        });
     }
 
     static fetchProduct() {
-        return products
+        const p = path.join(pth, 'data', 'products.json');
+        fs.readFile(p, (err, fileContent) => {
+            if(err) {
+                return [];
+            }
+            return JSON.parse(fileContent);
+        })
     }
 }
