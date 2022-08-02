@@ -21,13 +21,13 @@ module.exports = class Product {
         });
     }
 
-    static fetchProduct() {
+    static fetchProduct(cb) {
         const p = path.join(pth, 'data', 'products.json');
         fs.readFile(p, (err, fileContent) => {
             if(err) {
-                return [];
+                cb([]);
             }
-            return JSON.parse(fileContent);
+            cb(JSON.parse(fileContent));
         })
     }
 }
