@@ -7,18 +7,19 @@ exports.getAddProducts = (req, res, next) => {
   });
 };
 
-exports.getProducts =  (req, res, next) => {
-    Product.fetchProduct((products) => {
-      res.render("admin/products", {
-        prods: products,
-        pageTitle: "Admin Products",
-        path: "/admin/products",
-      });
+exports.getProducts = (req, res, next) => {
+  Product.fetchProduct((products) => {
+    res.render("admin/products", {
+      prods: products,
+      pageTitle: "Admin Products",
+      path: "/admin/products",
     });
-  };
+  });
+};
 
 exports.postAddProducts = (req, res, next) => {
-  const product = new Product(req.body.title);
+  const { title, imageUrl, price, description } = req.body;
+  const product = new Product(title, imageUrl, price, description);
   product.save();
   res.redirect("/");
 };
