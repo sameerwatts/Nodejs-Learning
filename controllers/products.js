@@ -3,13 +3,24 @@ const Product = require("../models/product");
 exports.getAddProducts = (req, res, next) => {
   res.render("admin/add-product", {
     pageTitle: "Add Product",
-    path: "/add-product",
+    path: "/admin/add-product",
     activeShop: false,
     activeAddProduct: true,
     hasProductCss: true,
     hasFormsCss: true,
   });
 };
+
+// exports.getAddProducts = (req, res, next) => {
+//     res.render("admin/products", {
+//       pageTitle: "Products",
+//       path: "/admin/products",
+//       activeShop: false,
+//       activeAddProduct: true,
+//       hasProductCss: true,
+//       hasFormsCss: true,
+//     });
+//   };
 
 exports.postAddProducts = (req, res, next) => {
   const product = new Product(req.body.title);
@@ -22,7 +33,7 @@ exports.getProducts = (req, res, next) => {
     res.render("shop/product-list", {
       prods: products,
       pageTitle: "Shop",
-      path: "/shop",
+      path: "/",
       isProductAvailable: products.length > 0,
       hasProductCss: true,
       activeShop: true,
