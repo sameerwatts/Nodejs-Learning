@@ -1,16 +1,1 @@
-[
-  {
-    "id": "0.1700908741583329",
-    "title": "Second product",
-    "imageUrl": "https://picsum.photos/201",
-    "description": "Second product with amazing picture",
-    "price": "2"
-  },
-  {
-    "id": "0.19950108668670952",
-    "title": "new third product",
-    "imageUrl": "https://picsum.photos/200",
-    "description": "Third product",
-    "price": "3"
-  }
-]
+[{"id":"0.19950108668670952","title":"new third product","imageUrl":"https://picsum.photos/200","description":"Third product","price":"3"}]
