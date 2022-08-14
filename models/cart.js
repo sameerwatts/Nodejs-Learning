@@ -8,7 +8,7 @@ module.exports = class Cart {
     fs.readFile(p, (err, fileContent) => {
       let cart = { products: [], totalPrice: 0 };
       if (!err) {
-         cart = JSON.parse(fileContent);
+        cart = JSON.parse(fileContent);
       }
       //Analize the cart == find existing cart
       const existingProductIndex = cart.products.findIndex((prod) => prod.id === id);
@@ -21,13 +21,30 @@ module.exports = class Cart {
         // cart.products = [...cart.products];
         cart.products[existingProductIndex] = updatedProduct;
       } else {
-        updatedProduct = { id: id, qty: 1};
+        updatedProduct = { id: id, qty: 1 };
         cart.products = [...cart.products, updatedProduct];
       }
       cart.totalPrice = cart.totalPrice + +productPrice;
-      fs.writeFile(p, JSON.stringify(cart), err => {
+      fs.writeFile(p, JSON.stringify(cart), (err) => {
         console.log(err);
-      })
+      });
+    });
+  }
+
+  static deleteProduct(id, productPrice) {
+    fs.readFile(p, (err, fileContent) => {
+      if (err) {
+        return;
+      }
+      const updatedCart = { ...JSON.parse(fileContent) };
+      const product = updatedCart.products.find((prod) => prod.id === id);
+
+      updatedCart.products = updatedCart.products.filter((prod) => prod.id !== id);
+      updatedCart.totalPrice = updatedCart.totalPrice - product.qty * productPrice;
+
+      fs.writeFile(p, JSON.stringify(updatedCart), (err) => {
+        console.log(err);
+      });
     });
   }
 };
