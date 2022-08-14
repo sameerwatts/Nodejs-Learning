@@ -27,7 +27,6 @@ module.exports = class Product {
         const updatedProducts = [...products];
         const updatedProductsIndex = updatedProducts.findIndex((prod) => prod.id === this.id);
         updatedProducts[updatedProductsIndex] = this;
-        console.log('updatedProducts',updatedProducts);
         fs.writeFile(p, JSON.stringify(updatedProducts), (err) => {
           console.log(err);
         });
@@ -50,5 +49,25 @@ module.exports = class Product {
 
   static fetchProduct(cb) {
     getProductFromFile(cb);
+  }
+
+  static delete(id) {
+    getProductFromFile((products) => {
+
+      // First method
+      // const productIndex = products.findIndex((p) => p.id === id);
+      // products.splice(productIndex, 1);
+
+      // Second method
+      const updatedProduct = products.filter((p) => p.id !== id);
+
+
+      fs.writeFile(p, JSON.stringify(updatedProduct), (err) => {
+        if(!err) {
+          // delete from cart as well
+        }
+        console.log(err);
+      });
+    });
   }
 };
