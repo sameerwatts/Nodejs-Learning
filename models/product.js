@@ -14,34 +14,38 @@ const getProductFromFile = (cb) => {
   });
 };
 module.exports = class Product {
-  constructor(title, imageUrl, description, price) {
+  constructor(id, title, imageUrl, description, price) {
+    this.id = id;
     this.title = title;
-    this.imageUrl = imageUrl,
-    this.description = description;
+    (this.imageUrl = imageUrl), (this.description = description);
     this.price = price;
   }
 
   save() {
     getProductFromFile((products) => {
-      this.id = Math.random().toString();
-      products.push(this);
-      fs.writeFile(p, JSON.stringify(products), (err) => {
-        console.log(err);
-      });
+      if (this.id) {
+        const updatedProducts = [...products];
+        const updatedProductsIndex = updatedProducts.findIndex((prod) => prod.id === this.id);
+        updatedProducts[updatedProductsIndex] = this;
+        console.log('updatedProducts',updatedProducts);
+        fs.writeFile(p, JSON.stringify(updatedProducts), (err) => {
+          console.log(err);
+        });
+      } else {
+        this.id = Math.random().toString();
+        products.push(this);
+        fs.writeFile(p, JSON.stringify(products), (err) => {
+          console.log(err);
+        });
+      }
     });
-    // fs.readFile(p, (err, fileContent) => {
-    //     let products = [];
-    //     if(!err) {
-    //         products = JSON.parse(fileContent);
-    //     }
-    // });
   }
 
   static findProductByID(id, cb) {
     getProductFromFile((products) => {
       const product = products.find((p) => p.id === id);
       cb(product);
-    })
+    });
   }
 
   static fetchProduct(cb) {
