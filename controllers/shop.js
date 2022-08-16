@@ -30,6 +30,7 @@ exports.getProduct = (req, res, next) => {
       path: "/products",
     });
   }).catch(err=> console.log(err))
+  // SECOND APPROACH
   // Product.findByPk(prodId).then((product)=> {
   //   res.render("shop/product-detail", {
   //     product: product,
