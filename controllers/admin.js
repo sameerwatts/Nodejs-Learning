@@ -10,10 +10,14 @@ exports.getAddProduct = (req, res, next) => {
 
 exports.postAddProducts = (req, res, next) => {
   const { title, imageUrl, price, description } = req.body;
-  const product = new Product(null, title, imageUrl, description, price);
-  product.save().then(() => {
-    res.redirect("/");
-  }).catch((err) => console.log(err));
+  Product.create({
+    title,
+    price,
+    imageUrl,
+    description,
+  })
+    .then((result) => console.log('Created product'))
+    .catch((err) => console.log(err));
 };
 
 exports.getEditProduct = (req, res, next) => {
@@ -24,8 +28,8 @@ exports.getEditProduct = (req, res, next) => {
   const prodId = req.params.productId;
 
   Product.findProductByID(prodId, (product) => {
-    if(!product) {
-      return res.redirect('/');
+    if (!product) {
+      return res.redirect("/");
     }
     res.render("admin/edit-product", {
       pageTitle: "Edit Product",
@@ -41,13 +45,13 @@ exports.postEditProduct = (req, res, next) => {
   const product = new Product(productid, title, imageUrl, description, price);
   product.save();
   res.redirect("/admin/products");
-}
+};
 
 exports.productDelete = (req, res, next) => {
   const productId = req.body.productid;
   Product.delete(productId);
   res.redirect("/admin/products");
-}
+};
 
 exports.getProducts = (req, res, next) => {
   Product.fetchProduct((products) => {
