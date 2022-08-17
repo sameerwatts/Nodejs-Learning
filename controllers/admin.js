@@ -10,15 +10,18 @@ exports.getAddProduct = (req, res, next) => {
 
 exports.postAddProducts = (req, res, next) => {
   const { title, imageUrl, price, description } = req.body;
-  Product.create({
-    title,
-    price,
-    imageUrl,
-    description,
-  })
+  console.log("req.user", req.user);
+
+  req.user
+    .createProduct({
+      title,
+      price,
+      imageUrl,
+      description,
+    })
     .then((result) => {
-      console.log("Created product")
-      res.redirect('/admin/products')
+      console.log("Created product");
+      res.redirect("/admin/products");
     })
     .catch((err) => console.log(err));
 };
@@ -71,7 +74,7 @@ exports.productDelete = (req, res, next) => {
       return product.destroy();
     })
     .then((result) => {
-      console.log("Product deleted") 
+      console.log("Product deleted");
       res.redirect("/admin/products");
     })
     .catch((err) => console.log(err));
