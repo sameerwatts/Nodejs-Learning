@@ -1,38 +1,40 @@
-const path = require("path");
+const path = require('path');
 
-const express = require("express");
-const bodyParser = require("body-parser");
+const express = require('express');
+const bodyParser = require('body-parser');
 
-const sequelize = require("./util/database");
+const errorController = require('./controllers/error');
+const sequelize = require('./util/database');
+const Product = require('./models/product');
+const User = require('./models/user');
 
 const app = express();
 
-app.set("view engine", "ejs");
-app.set("views", "views");
+app.set('view engine', 'ejs');
+app.set('views', 'views');
 
-const adminRouter = require("./routes/admin");
-const shopRoutes = require("./routes/shop");
-const errorController = require("./controllers/error");
-const Product = require("./models/product");
-const User = require("./models/user");
+const adminRoutes = require('./routes/admin');
+const shopRoutes = require('./routes/shop');
 
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, 'public')));
 
-app.use("/admin", adminRouter);
-app.use(shopRoutes);
+// app.use position maters
 app.use((req, res, next) => {
   User.findByPk(1)
-    .then((user) => {
+    .then(user => {
       req.user = user;
       next();
     })
-    .catch((err) => console.log(err));
+    .catch(err => console.log(err));
 });
 
-app.use(errorController.getPageNotFound);
+app.use("/admin", adminRoutes);
+app.use(shopRoutes);
 
-Product.belongsTo(User, { constraints: true, onDelete: "CASCADE" });
+
+app.use(errorController.getPageNotFound);
+Product.belongsTo(User, { constraints: true, onDelete: 'CASCADE' });
 User.hasMany(Product);
 
 sequelize
@@ -48,6 +50,7 @@ sequelize
     return user;
   })
   .then((user) => {
+    // console.log('user121313', user);
     app.listen(3001);
   })
   .catch((err) => console.log(err));
