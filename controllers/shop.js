@@ -2,34 +2,40 @@ const Cart = require("../models/cart");
 const Product = require("../models/product");
 
 exports.getIndex = (req, res, next) => {
-  Product.findAll().then(product => {
-    res.render("shop/index", {
-      prods: product,
-      pageTitle: "Shop",
-      path: "/",
-    });
-  }).catch(err=>console.log(err));
+  Product.findAll()
+    .then((product) => {
+      res.render("shop/index", {
+        prods: product,
+        pageTitle: "Shop",
+        path: "/",
+      });
+    })
+    .catch((err) => console.log(err));
 };
 
 exports.getProducts = (req, res, next) => {
-  Product.findAll().then(product => {
-    res.render("shop/product-list", {
-      prods: product,
-      pageTitle: "All Products",
-      path: "/products",
-    });
-  }).catch(err=>console.log(err));
+  Product.findAll()
+    .then((product) => {
+      res.render("shop/product-list", {
+        prods: product,
+        pageTitle: "All Products",
+        path: "/products",
+      });
+    })
+    .catch((err) => console.log(err));
 };
 
 exports.getProduct = (req, res, next) => {
   const prodId = req.params.productId;
-  Product.findAll({where: {id: prodId}}).then((products)=> {
-    res.render("shop/product-detail", {
-      product: products[0],
-      pageTitle: products[0].title,
-      path: "/products",
-    });
-  }).catch(err=> console.log(err))
+  Product.findAll({ where: { id: prodId } })
+    .then((products) => {
+      res.render("shop/product-detail", {
+        product: products[0],
+        pageTitle: products[0].title,
+        path: "/products",
+      });
+    })
+    .catch((err) => console.log(err));
   // SECOND APPROACH
   // Product.findByPk(prodId).then((product)=> {
   //   res.render("shop/product-detail", {
@@ -41,23 +47,20 @@ exports.getProduct = (req, res, next) => {
 };
 
 exports.getCart = (req, res, next) => {
-  Cart.getCart((cart) => {
-    Product.fetchProduct((products) => {
-      const cartProducts = [];
-      products.forEach((product) => {
-        const cartProductData = cart.products.find((prod) => prod.id === product.id);
-        if (cartProductData) {
-          cartProducts.push({ productData: product, qty: cartProductData.qty });
-        }
-      });
-      res.render("shop/cart", {
-        pageTitle: "Your Cart",
-        path: "/cart",
-        products: cartProducts,
-        totalPrice: cart.totalPrice,
-      });
-    });
-  });
+  console.log('req.user.cart', req.user.cart);
+  req.user
+    .getCart()
+    .then((cart) => {
+      cart.getProducts().then(cartProducts => {
+        res.render("shop/cart", {
+                pageTitle: "Your Cart",
+                path: "/cart",
+                products: cartProducts,
+                totalPrice: cart.totalPrice,
+              });
+      })
+    })
+    .catch((err) => console.log(err));
 };
 
 exports.postCart = (req, res, next) => {
