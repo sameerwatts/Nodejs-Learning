@@ -1,4 +1,4 @@
-const mongoConnect = import('../util/database');
+const getDb = import('../util/database').getDb;
 class Product {
   constructor(title, price, imageUrl, description) {
     this.title = title;
