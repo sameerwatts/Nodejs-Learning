@@ -17,14 +17,14 @@ const adminRoutes = require('./routes/admin');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// app.use((req, res, next) => {
+app.use((req, res, next) => {
   // User.findById(1)
   //   .then(user => {
   //     req.user = user;
-  //     next();
+      next();
   //   })
   //   .catch(err => console.log(err));
-// });
+});
 
 app.use('/admin', adminRoutes);
 // app.use(shopRoutes);
